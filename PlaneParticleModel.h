@@ -20,21 +20,21 @@ public:
 	// --------------- Get/Set ------------------ //
 
 	// Get/Set Car Direction
-	XMFLOAT3 GetPlaneDirection() const { return _planeDirection; }
-	void SetPlaneDirection(XMFLOAT3 planeDirection) { _planeDirection = planeDirection; }
+	XMFLOAT3 GetPlaneDirection()							const { return _planeDirection; }
+	void SetPlaneDirection(XMFLOAT3 planeDirection)			{ _planeDirection = planeDirection; }
 
 	// Get/Set Car Velocity
-	XMFLOAT3 GetPlaneVelocity() const { return _planeVelocity; }
-	void SetEngineSpeed(XMFLOAT3 planeVelocity) { _planeVelocity = planeVelocity; }
+	XMFLOAT3 GetPlaneVelocity()								const { return _planeVelocity; }
+	void SetEngineSpeed(XMFLOAT3 planeVelocity)				{ _planeVelocity = planeVelocity; }
 
 	// Get/Set/Add Engine Speed
-	float GetEngineSpeed() const { return _engineSpeed; }
-	void SetEngineSpeed(float engineSpeed) { _engineSpeed = engineSpeed; }
+	float GetEngineSpeed()									const { return _engineSpeed; }
+	void SetEngineSpeed(float engineSpeed)					{ _engineSpeed = engineSpeed; }
 	void AddEngineSpeed(float engineSpeed);
 
 	// Get/Set/Add Engine Speed Limit
-	float GetEngineSpeedLimit() const { return _engineSpeedLimit; }
-	void SetEngineSpeedLimit(float engineSpeedLimit) { _engineSpeedLimit = engineSpeedLimit; }
+	float GetEngineSpeedLimit()								const { return _engineSpeedLimit; }
+	void SetEngineSpeedLimit(float engineSpeedLimit)		{ _engineSpeedLimit = engineSpeedLimit; }
 
 private:
 	float _wheelRadius;
