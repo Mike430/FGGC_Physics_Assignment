@@ -95,7 +95,7 @@ private:
 
 	// Game Objects
 	//GameObject* carBody;
-	Plane* myPlane;
+	Plane* _player;
 	//Plane* aiPlane;
 
 	// Other Objects

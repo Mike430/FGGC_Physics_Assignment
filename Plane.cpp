@@ -8,7 +8,7 @@ Plane::Plane(GameObject* _planeBody, vector < GameObject* > _planeWheels)
 
 	planePos = planeBody->GetTransform()->GetPosition();
 
-	planeRotation = -350.0f;
+	planeRotation = 0.0f;// -350.0f;
 	planeRotationSpeed = 0.001f;
 	planeWheelRotation = 0.0f;
 
@@ -88,7 +88,7 @@ void Plane::Input()
 			planeWheelRotation -= 0.02f;
 		}
 
-		if (planeWheelRotation < 0.01f && planeWheelRotation > -0.01f)
+		if (planeWheelRotation < 0.05f && planeWheelRotation > -0.05f)
 		{
 			planeWheelRotation = 0;
 		}
@@ -190,7 +190,8 @@ void Plane::Update(float t)
 		planeRotation -= (planeWheelRotation * 100) * (engineSpeed * 20);
 	}
 
-	planeBody->GetTransform()->SetRotation(0.0f, planeRotation * planeRotationSpeed, 0.0f);
+	//Modify obj representation
+	planeBody->GetTransform()->SetRotation(0.0f, (planeRotation * planeRotationSpeed), 0.0f);
 
 	// Update Transform
 	planeBody->Update(t);

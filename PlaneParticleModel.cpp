@@ -7,6 +7,7 @@ PlaneParticleModel::PlaneParticleModel(Transform* transform, float mass) : Parti
 	_wheelSpeed = 1.0f;
 	_engineSpeed = 0.0f;
 	_wheelRadius = 10.0f;
+	_lift = 0.0f;
 
 	_engineSpeedLimit = 0.3f;
 
@@ -48,6 +49,26 @@ void PlaneParticleModel::CalculateVelocity()
 	_planeVelocity.x = _planeDirection.x * _thrust;
 	_planeVelocity.y = _planeDirection.y * _thrust;
 	_planeVelocity.z = _planeDirection.z * _thrust;
+
+	float xSqr = _planeVelocity.x * _planeVelocity.x;
+	float ySqr = _planeVelocity.y * _planeVelocity.y;
+	float zSqr = _planeVelocity.z * _planeVelocity.z;
+
+	_fwrdSpeed = sqrt(xSqr + ySqr + zSqr);
+}
+
+void PlaneParticleModel::CalculateLift(float t)
+{
+	float deltaTimeFrac = t / 1000;// t = +25.0f, needs to be converted into seconds
+	float takeOffSpeed = 150.0f * deltaTimeFrac;
+
+	_lift = 1.0f * ((_fwrdSpeed * 10) * deltaTimeFrac);
+	_planeVelocity.y += _lift;
+
+	/*if (_fwrdSpeed > takeOffSpeed)
+	{
+		
+	}*/
 }
 
 void PlaneParticleModel::Update(float t)
@@ -55,6 +76,11 @@ void PlaneParticleModel::Update(float t)
 	CalculateWheelSpeed();
 	CalculateThrust(t);
 	CalculateVelocity();
+	CalculateLift(t);
+
+	XMFLOAT3 floorPos = _transform->GetPosition();
+	floorPos.y = 0.0f;
+	BaseCollisionCheck(floorPos);
 
 	// Update Particle Model
 	ParticleModel::Update(t);

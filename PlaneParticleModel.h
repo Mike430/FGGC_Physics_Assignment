@@ -11,6 +11,7 @@ public:
 	void CalculateWheelSpeed();
 	void CalculateThrust(float t);
 	void CalculateVelocity();
+	void CalculateLift(float t);
 
 	void TruncateSpeed();
 
@@ -19,11 +20,11 @@ public:
 
 	// --------------- Get/Set ------------------ //
 
-	// Get/Set Car Direction
+	// Get/Set Plane Direction
 	XMFLOAT3 GetPlaneDirection()							const { return _planeDirection; }
 	void SetPlaneDirection(XMFLOAT3 planeDirection)			{ _planeDirection = planeDirection; }
 
-	// Get/Set Car Velocity
+	// Get/Set Plane Velocity
 	XMFLOAT3 GetPlaneVelocity()								const { return _planeVelocity; }
 	void SetEngineSpeed(XMFLOAT3 planeVelocity)				{ _planeVelocity = planeVelocity; }
 
@@ -32,9 +33,13 @@ public:
 	void SetEngineSpeed(float engineSpeed)					{ _engineSpeed = engineSpeed; }
 	void AddEngineSpeed(float engineSpeed);
 
-	// Get/Set/Add Engine Speed Limit
+	// Get/Set Engine Speed Limit
 	float GetEngineSpeedLimit()								const { return _engineSpeedLimit; }
 	void SetEngineSpeedLimit(float engineSpeedLimit)		{ _engineSpeedLimit = engineSpeedLimit; }
+
+	// Get/Set Plane Lift
+	float GetLift()											const { return _lift; }
+	void SetLift(float lift)								{ _lift = lift; }
 
 private:
 	float _wheelRadius;
@@ -45,6 +50,8 @@ private:
 	float _engineSpeedLimit;
 
 	float _thrust;
+	float _lift;
+	float _fwrdSpeed;
 
 	XMFLOAT3 _planeVelocity;
 	XMFLOAT3 _planeDirection;

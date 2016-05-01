@@ -103,6 +103,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\stone.dds", nullptr, &_pTextureRV);
 	CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\CFAPlaneTexture.dds", nullptr, &_pAIPlaneTex);
 	CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\F35PlaneTexture.dds", nullptr, &_pPlaneTex);
+	//CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\CFAPlaneTexture.dds", nullptr, &_pPlaneTex);
 	CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\carTex.dds", nullptr, &_pCarTex);
 
 	CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\track01.dds", nullptr, &_pRaceTrackTex);
@@ -227,10 +228,10 @@ void Application::InitObjects()
 	InitPlaneObjects();
 	
 	// Camera
-	XMFLOAT3 planePos = myPlane->GetPlanePosition();
+	XMFLOAT3 planePos = _player->GetPlanePosition();
 
-	myPlane->CalculateForwardVector();
-	XMFLOAT3 planeDirection = myPlane->GetForwardVector();
+	_player->CalculateForwardVector();
+	XMFLOAT3 planeDirection = _player->GetForwardVector();
 
 	camNum = 2;
 
@@ -289,6 +290,7 @@ void Application::InitPlaneObjects()
 
 	// Plane Body
 	Geometry planeGeometry = OBJLoader::Load("Objects/Plane Objects/F-35_Lightning_II.obj", _pd3dDevice);
+	//Geometry planeGeometry = OBJLoader::Load("Objects/Plane Objects/CFA44.obj", _pd3dDevice);
 
 	//XMFLOAT3 planePos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 planePos = XMFLOAT3(-415.415f, 0.0f, 35.63f);
@@ -373,7 +375,7 @@ void Application::InitPlaneObjects()
 	planeBody->AddChild(carTyreBackR);
 	planeBody->AddChild(carTyreBackL);
 
-	myPlane = new Plane(planeBody, planeWheels);
+	_player = new Plane(planeBody, planeWheels);
 }
 
 
@@ -921,7 +923,7 @@ void Application::CameraInput()
 	// If Camera 1, 2 or 3 then Check Plane Input
 	if (camNum == 1 || camNum == 2 || camNum == 3)
 	{
-		myPlane->Input();
+		_player->Input();
 	}
 
 	// Camera Input Check
@@ -949,8 +951,8 @@ void Application::CameraInput()
 	XMFLOAT3 Eye;
 	XMFLOAT3 At;
 
-	XMFLOAT3 planePos = myPlane->GetPlanePosition();
-	XMFLOAT3 planeDirection = myPlane->GetForwardVector();
+	XMFLOAT3 planePos = _player->GetPlanePosition();
+	XMFLOAT3 planeDirection = _player->GetForwardVector();
 
 	// Check Camera Number
 	if (camNum == 1)
@@ -1025,7 +1027,7 @@ void Application::PlaneUpdate(float t)
 	CameraInput();
 
 	// Plane Body Updates
-	myPlane->Update(t);
+	_player->Update(t);
 	
 }
 
@@ -1259,7 +1261,7 @@ void Application::Draw()
 	
 	// ------------- Draw Plane Body ------------- //
 
-	GameObject* planeBody = myPlane->GetPlaneBody();
+	GameObject* planeBody = _player->GetPlaneBody();
 	material = planeBody->GetAppearance()->GetMaterial();
 
 	// Copy material to shader
