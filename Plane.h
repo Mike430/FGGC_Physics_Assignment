@@ -6,7 +6,7 @@
 class Plane
 {
 public:
-	Plane(GameObject* _planeBody, vector < GameObject* > _planeWheels);
+	Plane(GameObject* planeBody);
 	~Plane();
 
 	virtual void Update(float t);
@@ -16,46 +16,45 @@ public:
 	void Input();
 
 	// Get Plane Body and Wheels
-	GameObject* GetPlaneBody()									const { return planeBody; };
-	vector< GameObject* > GetPlaneWheels()						const { planeWheels; };
+	GameObject* GetPlaneBody()									const { return _planeBody; };
+	//vector< GameObject* > GetPlaneWheels()						const { planeWheels; };
 
 	// Get/Set Plane Position
-	XMFLOAT3 GetPlanePosition()									const { return planePos; };
-	void SetPlanePosition(XMFLOAT3 _planePos)					{ planePos = _planePos; };
-	void SetPlanePosition(float x, float y, float z)			{ planePos.x = x, planePos.y = y, planePos.z = z; };
+	XMFLOAT3 GetPlanePosition()									const { return _planePos; };
+	void SetPlanePosition(XMFLOAT3 _planePos)					{ _planePos = _planePos; };
+	void SetPlanePosition(float x, float y, float z)			{ _planePos.x = x, _planePos.y = y, _planePos.z = z; };
 
 	// Get/Calculate Plane Forward Vector
-	XMFLOAT3 GetForwardVector()									const { return planeForwardVector; };
+	XMFLOAT3 GetForwardVector()									const { return _planeForwardVector; };
 	void CalculateForwardVector();
 
 	// Get/Set Plane Rotation
-	float GetPlaneRotation()									const { return planeRotation; };
-	void SetPlaneRotation(float _planeRotation)					{ planeRotation = _planeRotation; planeRotation = planeRotation * (XM_PI / 180);
-																planeBody->GetTransform()->SetRotation(0.0f, planeRotation, 0.0f); };
-	void AddPlaneRotation(float _planeRotation)					{ planeRotation = _planeRotation; planeRotation = planeRotation * (XM_PI / 180);
-																planeBody->GetTransform()->SetRotation(0.0f, planeRotation, 0.0f); };
+	float GetPlaneRotation()									const { return _planeRotation; };
+	void SetPlaneRotation(float _planeRotation)					{ _planeRotation = _planeRotation; _planeRotation = _planeRotation * (XM_PI / 180);
+																_planeBody->GetTransform()->SetRotation(0.0f, _planeRotation, 0.0f); };
+	void AddPlaneRotation(float _planeRotation)					{ _planeRotation = _planeRotation; _planeRotation = _planeRotation * (XM_PI / 180);
+																_planeBody->GetTransform()->SetRotation(0.0f, _planeRotation, 0.0f); };
 
 	// Get/Set Plane Rotation Speed
-//	float GetPlaneRotationSpeed()								const { return planeRotationSpeed; };
-//	void SetPlaneRotationSpeed(float _planeRotationSpeed)		{ planeRotationSpeed = planeRotationSpeed; };
+	// float GetPlaneRotationSpeed()								const { return planeRotationSpeed; };
+	// void SetPlaneRotationSpeed(float _planeRotationSpeed)		{ planeRotationSpeed = planeRotationSpeed; };
 
 	// Get/Set Plane Wheel Rotation
-	float GetPlaneWheelRotation() const							{ return planeWheelRotation; };
-	void SetPlaneWheelRotation(float _planeWheelRotation)		{ planeWheelRotation = _planeWheelRotation; };
-	void AddPlaneWheelRotation(float _planeWheelRotation)		{ planeWheelRotation += _planeWheelRotation; };
+	float GetPlaneWheelRotation() const							{ return _planeTurningAngle; };
+	void SetPlaneWheelRotation(float _planeWheelRotation)		{ _planeTurningAngle = _planeWheelRotation; };
+	void AddPlaneWheelRotation(float _planeWheelRotation)		{ _planeTurningAngle += _planeWheelRotation; };
 
 private:
 	// Plane Object
-	GameObject* planeBody;
-	vector < GameObject* > planeWheels;
+	GameObject* _planeBody;
 
 	// Plane Properties
-	XMFLOAT3 planePos;
-	XMFLOAT3 planeForwardVector;
+	XMFLOAT3 _planePos;
+	XMFLOAT3 _planeForwardVector;
 
-	float planeRotation;
-	float planeRotationSpeed;
-	float planeWheelRotation;
+	float _planeRotation;
+	float _planeRotationSpeed;
+	float _planeTurningAngle;
 
-	float engineSpeedAdd;
+	float _engineSpeedAdd;
 };

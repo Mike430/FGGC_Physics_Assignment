@@ -361,21 +361,7 @@ void Application::InitPlaneObjects()
 
 	particleModel = new PlaneParticleModel(transform, 1.0f);
 
-	GameObject* carTyreBackL = new GameObject("Car Tyre", appearance, transform, particleModel);
-
-	// Add Wheels to Plane Scene Graph
-	vector < GameObject* > planeWheels;
-	planeWheels.push_back(carTyreFrontR);
-	planeWheels.push_back(carTyreFrontL);
-	planeWheels.push_back(carTyreBackR);
-	planeWheels.push_back(carTyreBackL);
-
-	planeBody->AddChild(carTyreFrontR);
-	planeBody->AddChild(carTyreFrontL);
-	planeBody->AddChild(carTyreBackR);
-	planeBody->AddChild(carTyreBackL);
-
-	_player = new Plane(planeBody, planeWheels);
+	_player = new Plane(planeBody);
 }
 
 

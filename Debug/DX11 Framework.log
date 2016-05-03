@@ -1,8 +1,4 @@
-﻿Build started 01/05/2016 23:45:27.
-     1>Project "C:\Users\ymike\Desktop\FGGC_Physics_Assignment_FUCKED\DX11 Framework.vcxproj" on node 2 (Clean target(s)).
-     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppClean.targets(76,5): warning : The process cannot access the file 'c:\users\ymike\desktop\fggc_physics_assignment_fucked\debug\ddstextureloader.sbr' because it is being used by another process.
-     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppClean.targets(76,5): warning : The process cannot access the file 'c:\users\ymike\desktop\fggc_physics_assignment_fucked\debug\dx11 framework.ilk' because it is being used by another process.
-     1>Done Building Project "C:\Users\ymike\Desktop\FGGC_Physics_Assignment_FUCKED\DX11 Framework.vcxproj" (Clean target(s)).
+﻿Build started 03/05/2016 23:56:02.
 
 Build succeeded.
 
