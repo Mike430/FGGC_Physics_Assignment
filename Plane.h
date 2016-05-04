@@ -56,5 +56,10 @@ private:
 	float _planeRotationSpeed;
 	float _planeTurningAngle;
 
+	const float _planeMaxRoll = 1;
+	float _planeRoll;
+	const float _planeMaxPitch = 1;
+	float _planePitch;
+
 	float _engineSpeedAdd;
 };

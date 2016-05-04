@@ -64,11 +64,6 @@ void PlaneParticleModel::CalculateLift(float t)
 
 	_lift = (_fwrdSpeed * 5) - (_transform->GetPosition().y * 0.05f);
 	this->AddForce(0.0f, _lift, 0.0f);
-
-	/*if (_fwrdSpeed > takeOffSpeed)
-	{
-		
-	}*/
 }
 
 void PlaneParticleModel::Update(float t)

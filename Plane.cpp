@@ -10,6 +10,7 @@ Plane::Plane(GameObject* planeBody)
 	_planeRotation = 0.0f;// -350.0f;
 	_planeRotationSpeed = 0.001f;
 	_planeTurningAngle = 0.0f;
+	_planeRoll = 0.0f;
 
 	_engineSpeedAdd = 0.0008f;
 }
@@ -43,10 +44,10 @@ void Plane::Input()
 		{
 			planeBodyModel->AddEngineSpeed(-_engineSpeedAdd * 2.0f);
 		}
-		else
+		/*else
 		{
 			planeBodyModel->AddEngineSpeed((-_engineSpeedAdd / 1.5f));
-		}
+		}*/
 	}
 	else
 	{
@@ -71,26 +72,35 @@ void Plane::Input()
 	if (GetAsyncKeyState('A'))
 	{
 		_planeTurningAngle -= 0.01f;
+		
+		if (_planeRoll < _planeMaxRoll)
+			_planeRoll += 1.0f;
 	}
 	else if (GetAsyncKeyState('D'))
 	{
 		_planeTurningAngle += 0.01f;
+
+		if (_planeRoll > -_planeMaxRoll)
+			_planeRoll -= 0.01f;
 	}
 	else
 	{
 		if (_planeTurningAngle < 0)
-		{
 			_planeTurningAngle += 0.02f;
-		}
+
 		else if (_planeTurningAngle > 0)
-		{
 			_planeTurningAngle -= 0.02f;
-		}
+
+		if (_planeRoll > 0)
+			_planeRoll -= 0.01f;
+		else if (_planeRoll < 0)
+			_planeRoll += 0.01f;
 
 		if (_planeTurningAngle < 0.05f && _planeTurningAngle > -0.05f)
-		{
 			_planeTurningAngle = 0;
-		}
+
+		if (_planeRoll < 0.1f && _planeRoll > -0.1f)
+			_planeRoll = 0;
 	}
 }
 
@@ -185,7 +195,7 @@ void Plane::Update(float t)
 	}
 
 	//Modify obj representation
-	_planeBody->GetTransform()->SetRotation(0.0f, (_planeRotation * _planeRotationSpeed), 0.0f);
+	_planeBody->GetTransform()->SetRotation(0.0f, (_planeRotation * _planeRotationSpeed), _planeRoll);
 
 	// Update Transform
 	_planeBody->Update(t);
