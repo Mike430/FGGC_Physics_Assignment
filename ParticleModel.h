@@ -61,6 +61,17 @@ public:
 
 	void SetTheta(float theta) { _theta = theta; }
 
+	// Manipulators
+	void AddForce(XMFLOAT3 force);
+
+	void AddForce(float x, float y, float z);
+
+	void AddTorque(XMFLOAT3 torque);
+
+	void AddTorque(float x, float y, float z);
+
+	void ResetForces();
+
 protected:
 	Transform* _transform;
 
@@ -75,6 +86,7 @@ private:
 
 	// Forces
 	XMFLOAT3 _netForce;
+	XMFLOAT3 _otherForces;
 	float _forceMag;
 
 	// Drag Force

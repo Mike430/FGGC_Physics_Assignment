@@ -8,6 +8,7 @@ ParticleModel::ParticleModel(Transform* transform, float mass)
 	_acceleration = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	_velocity = XMFLOAT3(0.0f, 0.0f, -0.1f);
 	_netForce = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	_otherForces = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	_slidingForce = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 	_dragFactor = 1.0f;
@@ -240,9 +241,9 @@ void ParticleModel::UpdateAccel()
 
 void ParticleModel::UpdateNetForce()
 {
-	_netForce.x = _dragForce.x + _slidingForce.x;
-	_netForce.y = _dragForce.y + _slidingForce.y;
-	_netForce.z = _dragForce.z + _slidingForce.z;
+	_netForce.x = _dragForce.x + _slidingForce.x + _otherForces.x;
+	_netForce.y = _dragForce.y + _slidingForce.y + _otherForces.y;
+	_netForce.z = _dragForce.z + _slidingForce.z + _otherForces.z;
 }
 
 void ParticleModel::UpdateState()
@@ -274,4 +275,25 @@ void ParticleModel::Update(float t)
 	{
 		MoveConstVel(t);
 	}
+	ResetForces();
+}
+
+// Manipulators
+void ParticleModel::AddForce(XMFLOAT3 force)
+{
+	AddForce(force.x, force.y, force.z);
+}
+
+void ParticleModel::AddForce(float x, float y, float z)
+{
+	_otherForces.x += x;
+	_otherForces.y += y;
+	_otherForces.z += z;
+}
+
+void ParticleModel::ResetForces()
+{
+	_otherForces.x = 0.0f;
+	_otherForces.y = 0.0f;
+	_otherForces.z = 0.0f;
 }

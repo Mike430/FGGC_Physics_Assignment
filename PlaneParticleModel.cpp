@@ -62,8 +62,8 @@ void PlaneParticleModel::CalculateLift(float t)
 	float deltaTimeFrac = t / 1000;// t = +25.0f, needs to be converted into seconds
 	float takeOffSpeed = 150.0f * deltaTimeFrac;
 
-	_lift = 1.0f * ((_fwrdSpeed * 10) * deltaTimeFrac);
-	_planeVelocity.y += _lift;
+	_lift = (_fwrdSpeed * 5) - (_transform->GetPosition().y * 0.05f);
+	this->AddForce(0.0f, _lift, 0.0f);
 
 	/*if (_fwrdSpeed > takeOffSpeed)
 	{
