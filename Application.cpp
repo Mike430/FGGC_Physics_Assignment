@@ -863,7 +863,7 @@ void Application::MoveForward(int objectNumber)
 	}
 }
 
-void Application::CameraInput()
+void Application::CameraInput(float t)
 {
 	// If Camera 1 then Check Free Camera input
 	if (camNum == 1)
@@ -909,7 +909,7 @@ void Application::CameraInput()
 	// If Camera 1, 2 or 3 then Check Plane Input
 	if (camNum == 1 || camNum == 2 || camNum == 3)
 	{
-		_player->Input();
+		_player->Input(t);
 	}
 
 	// Camera Input Check
@@ -1010,7 +1010,7 @@ void Application::CameraInput()
 
 void Application::PlaneUpdate(float t)
 {
-	CameraInput();
+	CameraInput(t);
 
 	// Plane Body Updates
 	_player->Update(t);

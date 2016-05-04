@@ -150,7 +150,7 @@ private:
 	void InitObjects();
 	void InitPlaneObjects();
 	void PlaneUpdate(float t);
-	void CameraInput();
+	void CameraInput(float t);
 	
 	void MoveForward(int objectNumber);
 

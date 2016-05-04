@@ -13,7 +13,7 @@ public:
 	void Draw(ID3D11DeviceContext* _pImmediateContext);
 
 	// Plane Input
-	void Input();
+	void Input(float t);
 
 	// Get Plane Body and Wheels
 	GameObject* GetPlaneBody()									const { return _planeBody; };
@@ -56,9 +56,9 @@ private:
 	float _planeRotationSpeed;
 	float _planeTurningAngle;
 
-	const float _planeMaxRoll = 1;
+	const float _planeMaxRoll = 0.5f;
 	float _planeRoll;
-	const float _planeMaxPitch = 1;
+	const float _planeMaxPitch = 0.5f;
 	float _planePitch;
 
 	float _engineSpeedAdd;

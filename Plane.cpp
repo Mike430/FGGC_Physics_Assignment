@@ -11,6 +11,7 @@ Plane::Plane(GameObject* planeBody)
 	_planeRotationSpeed = 0.001f;
 	_planeTurningAngle = 0.0f;
 	_planeRoll = 0.0f;
+	_planePitch = 0.0f;
 
 	_engineSpeedAdd = 0.0008f;
 }
@@ -20,7 +21,7 @@ Plane::~Plane()
 
 }
 
-void Plane::Input()
+void Plane::Input(float t)
 {
 	PlaneParticleModel* planeBodyModel = (PlaneParticleModel*)_planeBody->GetParticleModel();
 	float engineSpeed = planeBodyModel->GetEngineSpeed();
@@ -69,37 +70,41 @@ void Plane::Input()
 	}
 
 	// Car Rotation Check
+	float deltaTime = t * 0.001;
+	float turnRate = 1.0f * deltaTime;
+	float visualTurnRate = 1.0f * deltaTime;
+
 	if (GetAsyncKeyState('A'))
 	{
-		_planeTurningAngle -= 0.01f;
+		_planeTurningAngle -= turnRate;
 		
 		if (_planeRoll < _planeMaxRoll)
-			_planeRoll += 1.0f;
+			_planeRoll += visualTurnRate;
 	}
 	else if (GetAsyncKeyState('D'))
 	{
-		_planeTurningAngle += 0.01f;
+		_planeTurningAngle += turnRate;
 
 		if (_planeRoll > -_planeMaxRoll)
-			_planeRoll -= 0.01f;
+			_planeRoll -= visualTurnRate;
 	}
 	else
 	{
 		if (_planeTurningAngle < 0)
-			_planeTurningAngle += 0.02f;
+			_planeTurningAngle += turnRate;
 
 		else if (_planeTurningAngle > 0)
-			_planeTurningAngle -= 0.02f;
+			_planeTurningAngle -= turnRate;
 
 		if (_planeRoll > 0)
-			_planeRoll -= 0.01f;
+			_planeRoll -= visualTurnRate;
 		else if (_planeRoll < 0)
-			_planeRoll += 0.01f;
+			_planeRoll += visualTurnRate;
 
-		if (_planeTurningAngle < 0.05f && _planeTurningAngle > -0.05f)
+		if (_planeTurningAngle < 0.01f && _planeTurningAngle > -0.01f)
 			_planeTurningAngle = 0;
 
-		if (_planeRoll < 0.1f && _planeRoll > -0.1f)
+		if (_planeRoll < 0.01f && _planeRoll > -0.01f)
 			_planeRoll = 0;
 	}
 }
@@ -131,6 +136,12 @@ void Plane::Update(float t)
 
 	PlaneParticleModel* planeBodyModel = (PlaneParticleModel*)_planeBody->GetParticleModel();
 	float engineSpeed = planeBodyModel->GetEngineSpeed();
+
+	float lift = planeBodyModel->GetLift();
+	if (lift > 10)
+		_planePitch = ((lift * 0.05) - 0.5f) * -1.0f;
+	else
+		_planePitch = 0.0f;
 
 	// Check Plane type --- you will want to add an AI controlled plane
 	string type = _planeBody->GetType();
@@ -195,7 +206,7 @@ void Plane::Update(float t)
 	}
 
 	//Modify obj representation
-	_planeBody->GetTransform()->SetRotation(0.0f, (_planeRotation * _planeRotationSpeed), _planeRoll);
+	_planeBody->GetTransform()->SetRotation(_planePitch, (_planeRotation * _planeRotationSpeed), _planeRoll);
 
 	// Update Transform
 	_planeBody->Update(t);
