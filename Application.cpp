@@ -293,7 +293,7 @@ void Application::InitPlaneObjects()
 	//Geometry planeGeometry = OBJLoader::Load("Objects/Plane Objects/CFA44.obj", _pd3dDevice);
 
 	//XMFLOAT3 planePos = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	XMFLOAT3 planePos = XMFLOAT3(-415.415f, 0.0f, 35.63f);
+	XMFLOAT3 planePos = XMFLOAT3(-415.415f, 10.0f, 35.63f);
 
 	appearance = new Appearance(planeGeometry, shinyMaterial);
 	appearance->SetTextureRV(_pPlaneTex);
