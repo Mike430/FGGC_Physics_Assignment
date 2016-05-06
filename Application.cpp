@@ -226,6 +226,7 @@ void Application::InitObjects()
 
 	// Init Plane collection Objects
 	InitPlaneObjects();
+	InitBuildings();
 	
 	// Camera
 	XMFLOAT3 planePos = _player->GetPlanePosition();
@@ -362,6 +363,31 @@ void Application::InitPlaneObjects()
 	particleModel = new PlaneParticleModel(transform, 1.0f);
 
 	_player = new Plane(planeBody);
+}
+
+void Application::InitBuildings()
+{
+	int numberOfbuildings = 100;
+
+	Geometry building = OBJLoader::Load("Objects/Building.obj", _pd3dDevice);
+	Appearance* buildingappearance = new Appearance(building, noSpecMaterial);
+
+	buildings.clear();
+
+	for (int i = 0; i <  numberOfbuildings / 10; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			Transform* place = new Transform();
+			place->SetPosition((i * 50) - 200, 0.0f, (j * 50) - 100);
+			place->SetScale(1, 1, 1);
+
+			ParticleModel* structure = new ParticleModel(place, 1000.0f);
+
+			GameObject* building = new GameObject("building", buildingappearance, place, structure);
+			buildings.push_back(building);
+		}
+	}
 }
 
 
@@ -1068,6 +1094,12 @@ void Application::Update(float t)
 	//skyBox->GetTransform()->SetPosition(object2Pos);
 	skyBox->Update(t);
 
+
+	// Update Building
+	for (int i = 0; i < buildings.size(); i++)
+	{
+		buildings.at(i)->Update(t);
+	}
 }
 
 // --------------- Draw --------------- //
@@ -1243,7 +1275,21 @@ void Application::Draw()
 	// Draw object
 	raceTrack->Draw(_pImmediateContext);
 
+	// ------------- Draw Buildings ------------- //
 
+	for (int i = 0; i < buildings.size(); i++)
+	{
+		material = buildings.at(i)->GetAppearance()->GetMaterial();
+		cb.surface.AmbientMtrl = material.ambient;
+		cb.surface.DiffuseMtrl = material.diffuse;
+		cb.surface.SpecularMtrl = material.specular;
+
+		cb.World = XMMatrixTranspose(buildings.at(i)->GetTransform()->GetWorldMatrix());
+
+
+		_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+		buildings.at(i)->Draw(_pImmediateContext);
+	}
 	
 	// ------------- Draw Plane Body ------------- //
 

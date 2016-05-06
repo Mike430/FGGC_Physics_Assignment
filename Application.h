@@ -108,6 +108,7 @@ private:
 	GameObject* groundPlane;
 	GameObject* mountain;
 	GameObject* skyBox;
+	vector<GameObject*> buildings;
 
 	// Waypoints
 	vector < GameObject* > waypoints;
@@ -149,6 +150,7 @@ private:
 	// From Semester 1
 	void InitObjects();
 	void InitPlaneObjects();
+	void InitBuildings();
 	void PlaneUpdate(float t);
 	void CameraInput(float t);
 	
