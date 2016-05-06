@@ -291,9 +291,8 @@ void Application::InitPlaneObjects()
 
 	// Plane Body
 	Geometry planeGeometry = OBJLoader::Load("Objects/Plane Objects/F-35_Lightning_II.obj", _pd3dDevice);
-	//Geometry planeGeometry = OBJLoader::Load("Objects/Plane Objects/CFA44.obj", _pd3dDevice);
+	// Geometry planeGeometry = OBJLoader::Load("Objects/Plane Objects/CFA44.obj", _pd3dDevice);
 
-	//XMFLOAT3 planePos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 planePos = XMFLOAT3(-415.415f, 10.0f, 35.63f);
 
 	appearance = new Appearance(planeGeometry, shinyMaterial);
@@ -308,61 +307,10 @@ void Application::InitPlaneObjects()
 
 	GameObject* planeBody = new GameObject("Plane", appearance, transform, particleModel);
 
-	// Plane Tyre Front Right
-	Geometry carTyreFrontRGeometry = OBJLoader::Load("Objects/Plane Objects/carTyreFrontR.obj", _pd3dDevice);
-
-	appearance = new Appearance(carTyreFrontRGeometry, shinyMaterial);
-	appearance->SetTextureRV(_pCarTex);
-
-	transform = new Transform();
-	transform->SetScale(0.1f,0.1f,0.1f);
-	transform->SetPosition(3.75f*5, 1.8f*5, 4.8f*5);
-
-	particleModel = new PlaneParticleModel(transform, 1.0f);
-
-	GameObject* carTyreFrontR = new GameObject("Car Tyre", appearance, transform, particleModel);
-
-	// Car Tyre Front Left
-	Geometry carTyreFrontLGeometry = OBJLoader::Load("Objects/Plane Objects/carTyreFrontL.obj", _pd3dDevice);
-
-	appearance = new Appearance(carTyreFrontLGeometry, shinyMaterial);
-	appearance->SetTextureRV(_pCarTex);
-
-	transform = new Transform();
-	transform->SetScale(0.1f, 0.1f, 0.1f);
-	transform->SetPosition(-3.75f*2, 1.8f*2, 4.8f*2);
-
-	particleModel = new PlaneParticleModel(transform, 1.0f);
-
-	GameObject* carTyreFrontL = new GameObject("Car Tyre", appearance, transform, particleModel);
-
-	// Car Tyre Back Right
-	Geometry carTyreBackRGeometry = OBJLoader::Load("Objects/Plane Objects/carTyreBackR.obj", _pd3dDevice);
-
-	appearance = new Appearance(carTyreBackRGeometry, shinyMaterial);
-	appearance->SetTextureRV(_pCarTex);
-
-	transform = new Transform();
-	transform->SetScale(0.1f, 0.1f, 0.1f);
-	transform->SetPosition(-3.5f*2, 1.8f*2, -8.8f*2);
-
-	particleModel = new PlaneParticleModel(transform, 1.0f);
-
-	GameObject* carTyreBackR = new GameObject("Car Tyre", appearance, transform, particleModel);
-
-	// Car Tyre Back Left
-	Geometry carTyreBackLGeometry = OBJLoader::Load("Objects/Plane Objects/carTyreBackL.obj", _pd3dDevice);
-
-	appearance = new Appearance(carTyreBackLGeometry, shinyMaterial);
-	appearance->SetTextureRV(_pCarTex);
-
-	transform = new Transform();
-	transform->SetScale(0.1f, 0.1f, 0.1f);
-	transform->SetPosition(3.5*2, 1.8f*2, -8.8f*2);
-
-	particleModel = new PlaneParticleModel(transform, 1.0f);
-
 	_player = new Plane(planeBody);
+
+	// AIs
+
 }
 
 void Application::InitBuildings()

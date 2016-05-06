@@ -1,6 +1,6 @@
 #include "AICar.h"
 
-AICar::AICar(GameObject* _carBody, vector < GameObject* > _carWheels, vector < GameObject* > _waypoints) : Plane(_carBody, _carWheels)
+AICar::AICar(GameObject* _carBody, vector < GameObject* > _carWheels, vector < GameObject* > _waypoints) : Plane(_carBody)
 {
 	waypoints = _waypoints;
 	targetPosition = XMFLOAT3(0.0f, 0.0f, 0.0f);

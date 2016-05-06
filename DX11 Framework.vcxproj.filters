@@ -56,6 +56,9 @@
     <ClInclude Include="PlaneParticleModel.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="AICar.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Appearance.cpp">
@@ -92,6 +95,9 @@
       <Filter>CPP</Filter>
     </ClCompile>
     <ClCompile Include="PlaneParticleModel.cpp">
+      <Filter>CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="AICar.cpp">
       <Filter>CPP</Filter>
     </ClCompile>
   </ItemGroup>
