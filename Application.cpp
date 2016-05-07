@@ -101,9 +101,8 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
     }
 
 	CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\stone.dds", nullptr, &_pTextureRV);
-	CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\CFAPlaneTexture.dds", nullptr, &_pAIPlaneTex);
-	CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\F35PlaneTexture.dds", nullptr, &_pPlaneTex);
-	//CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\CFAPlaneTexture.dds", nullptr, &_pPlaneTex);
+	CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\F35PlaneTexture.dds", nullptr, &_planeTex);
+	CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\CFAPlaneTexture.dds", nullptr, &_aiPlaneTex);
 	CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\carTex.dds", nullptr, &_pCarTex);
 
 	CreateDDSTextureFromFile(_pd3dDevice, L"Resources\\track01.dds", nullptr, &_pRaceTrackTex);
@@ -118,6 +117,25 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	XMFLOAT3 up = XMFLOAT3(0.0f, 1.0f, 0.0f);
 
 	_camera = new Camera(eye, at, up, (float)_renderWidth, (float)_renderHeight, 0.01f, 1000000.0f);
+
+	XMFLOAT3 way1 = XMFLOAT3(-600.0f,	 0.0f,	 -600.0f);
+	XMFLOAT3 way2 = XMFLOAT3(600.0f,	 0.0f,	 -500.0f);
+	XMFLOAT3 way3 = XMFLOAT3(700.0f,	 0.0f,	 200.0f);
+	XMFLOAT3 way4 = XMFLOAT3(700.0f,	 0.0f,	 -350.0f);
+	XMFLOAT3 way5 = XMFLOAT3(350.0f,	 0.0f,	 600.0f);
+	XMFLOAT3 way6 = XMFLOAT3(-350.0f,	 0.0f,	 750.0f);
+	XMFLOAT3 way7 = XMFLOAT3(-350.0f,	 0.0f,	 350.0f);
+	XMFLOAT3 way8 = XMFLOAT3(-600.0f,	 0.0f,	 -600.0f);
+
+	_waypoints = new vector<XMFLOAT3>();
+	_waypoints->push_back(way1);
+	_waypoints->push_back(way2);
+	_waypoints->push_back(way3);
+	_waypoints->push_back(way4);
+	_waypoints->push_back(way5);
+	_waypoints->push_back(way6);
+	_waypoints->push_back(way7);
+	_waypoints->push_back(way8);
 
 	InitObjects();
 
@@ -283,26 +301,15 @@ void Application::InitObjects()
 
 void Application::InitPlaneObjects()
 {
-	Appearance* appearance;
-	Transform* transform;
-	ParticleModel* particleModel;
-
-	// Plane Objects
-
-	// Plane Body
 	Geometry planeGeometry = OBJLoader::Load("Objects/Plane Objects/F-35_Lightning_II.obj", _pd3dDevice);
-	// Geometry planeGeometry = OBJLoader::Load("Objects/Plane Objects/CFA44.obj", _pd3dDevice);
+	Appearance* appearance = new Appearance(planeGeometry, shinyMaterial);
+	appearance->SetTextureRV(_planeTex);
 
-	XMFLOAT3 planePos = XMFLOAT3(-415.415f, 10.0f, 35.63f);
-
-	appearance = new Appearance(planeGeometry, shinyMaterial);
-	appearance->SetTextureRV(_pPlaneTex);
-
-	transform = new Transform();
+	Transform* transform = new Transform();
 	transform->SetScale(1.0f, 1.0f, 1.0f);
-	transform->SetPosition(planePos);
+	transform->SetPosition(-415.415f, 10.0f, 35.63f);
 
-	particleModel = new PlaneParticleModel(transform, 1.0f);
+	ParticleModel* particleModel = new PlaneParticleModel(transform, 1.0f);
 	particleModel->SetCollisionRadius(10.0f);
 
 	GameObject* planeBody = new GameObject("Plane", appearance, transform, particleModel);
@@ -310,7 +317,25 @@ void Application::InitPlaneObjects()
 	_player = new Plane(planeBody);
 
 	// AIs
+	// -----------------------------
+	Geometry aiGeometry = OBJLoader::Load("Objects/Plane Objects/CFA44.obj", _pd3dDevice);
+	Appearance* iaAppearance = new Appearance(aiGeometry, shinyMaterial);
+	iaAppearance->SetTextureRV(_planeTex);
+	
+	_numberOfPlanes = 20;
+	for (int i = 0; i < _numberOfPlanes; i++)
+	{
+		Transform* aiTransform = new Transform();
+		aiTransform->SetScale(1.0f, 1.0f, 1.0f);
+		aiTransform->SetPosition(415.415f - (i * 10), 1000.0f, 35.63f + (i * 20));
 
+		PlaneParticleModel* aiParticle = new PlaneParticleModel(aiTransform, 1.0);
+
+		GameObject* aiPlaneBody = new GameObject("Plane", iaAppearance, aiTransform, aiParticle);
+
+		AIPlane* aiPlane = new AIPlane(aiPlaneBody, _waypoints);
+		_aiPlanes.push_back(aiPlane);
+	}
 }
 
 void Application::InitBuildings()
@@ -1048,6 +1073,11 @@ void Application::Update(float t)
 	{
 		buildings.at(i)->Update(t);
 	}
+
+	for (int i = 0; i < _aiPlanes.size(); i++)
+	{
+		_aiPlanes.at(i)->Update(t);
+	}
 }
 
 // --------------- Draw --------------- //
@@ -1237,6 +1267,22 @@ void Application::Draw()
 
 		_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
 		buildings.at(i)->Draw(_pImmediateContext);
+	}
+
+	// ------------- Draw AIs -------------------- //
+
+	for (int i = 0; i < _aiPlanes.size(); i++)
+	{
+		material = _aiPlanes.at(i)->GetPlaneBody()->GetAppearance()->GetMaterial();
+		cb.surface.AmbientMtrl = material.ambient;
+		cb.surface.DiffuseMtrl = material.diffuse;
+		cb.surface.SpecularMtrl = material.specular;
+
+		cb.World = XMMatrixTranspose(_aiPlanes.at(i)->GetPlaneBody()->GetTransform()->GetWorldMatrix());
+
+
+		_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+		_aiPlanes.at(i)->Draw(_pImmediateContext);
 	}
 	
 	// ------------- Draw Plane Body ------------- //

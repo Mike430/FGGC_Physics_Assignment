@@ -1,8 +1,5 @@
-﻿Build started 06/05/2016 17:59:03.
-     1>Project "C:\Users\Mike\Desktop\FGGC_Physics_Assignment\DX11 Framework.vcxproj" on node 2 (Clean target(s)).
-     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppClean.targets(76,5): warning : The process cannot access the file 'c:\users\mike\desktop\fggc_physics_assignment\debug\dx11 framework.pdb' because it is being used by another process.
-     1>Done Building Project "C:\Users\Mike\Desktop\FGGC_Physics_Assignment\DX11 Framework.vcxproj" (Clean target(s)).
+﻿Build started 07/05/2016 21:59:45.
 
 Build succeeded.
 
-Time Elapsed 00:00:00.05
+Time Elapsed 00:00:00.04

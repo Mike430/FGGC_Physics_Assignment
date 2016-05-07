@@ -9,7 +9,7 @@
 #include <vector>
 
 #include "Structures.h"
-#include "AICar.h"
+#include "AIPlane.h"
 #include "Plane.h"
 #include "Camera.h"
 #include "CarParticleModel.h"
@@ -61,8 +61,8 @@ private:
 	ID3D11ShaderResourceView* _pCarTex = nullptr;
 
 	//aircraft textures
-	ID3D11ShaderResourceView* _pAIPlaneTex = nullptr;
-	ID3D11ShaderResourceView* _pPlaneTex = nullptr;
+	ID3D11ShaderResourceView* _planeTex = nullptr;
+	ID3D11ShaderResourceView* _aiPlaneTex = nullptr;
 
 	ID3D11SamplerState* _pSamplerLinear = nullptr;
 
@@ -94,9 +94,9 @@ private:
 	Material noSpecMaterial;
 
 	// Game Objects
-	//GameObject* carBody;
 	Plane* _player;
-	//Plane* aiPlane;
+	int _numberOfPlanes;
+	vector<AIPlane*> _aiPlanes;
 
 	// Other Objects
 	Geometry cubeGeometry;
@@ -111,7 +111,8 @@ private:
 	vector<GameObject*> buildings;
 
 	// Waypoints
-	vector < GameObject* > waypoints;
+	//vector < GameObject* > waypoints;
+	vector<XMFLOAT3>* _waypoints;
 
 	// Car GameObject properties
 	/*XMFLOAT3 carPos;

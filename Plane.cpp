@@ -197,12 +197,12 @@ void Plane::Update(float t)
 	// Rotate Car in consideration to the Wheels Rotation
 	if (engineSpeed > 0)
 	{
-		_planeRotation += (_planeTurningAngle * 100) * (engineSpeed * 20);
+		_planeRotation += (_planeTurningAngle * 40) * (engineSpeed * 20);
 	}
 	else if (engineSpeed < 0)
 	{
 		engineSpeed *= -1;
-		_planeRotation -= (_planeTurningAngle * 100) * (engineSpeed * 20);
+		_planeRotation -= (_planeTurningAngle * 40) * (engineSpeed * 20);
 	}
 
 	//Modify obj representation
