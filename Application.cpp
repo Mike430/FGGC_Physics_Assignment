@@ -118,29 +118,34 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	_camera = new Camera(eye, at, up, (float)_renderWidth, (float)_renderHeight, 0.01f, 1000000.0f);
 
-	XMFLOAT3 way1 = XMFLOAT3(-1000.0f, 0.0f, -1000.0f);
-	XMFLOAT3 way2 = XMFLOAT3(1000.0f, 0.0f, -1000.0f);
-	XMFLOAT3 way3 = XMFLOAT3(1000.0f, 0.0f, 1000.0f);
-	XMFLOAT3 way4 = XMFLOAT3(-1000.0f, 0.0f, 1000.0f);
-
-	/*XMFLOAT3 way1 = XMFLOAT3(-600.0f,	 0.0f,	 -600.0f);
-	XMFLOAT3 way2 = XMFLOAT3(600.0f,	 0.0f,	 -500.0f);
-	XMFLOAT3 way3 = XMFLOAT3(700.0f,	 0.0f,	 200.0f);
-	XMFLOAT3 way4 = XMFLOAT3(700.0f,	 0.0f,	 -350.0f);
-	XMFLOAT3 way5 = XMFLOAT3(350.0f,	 0.0f,	 600.0f);
-	XMFLOAT3 way6 = XMFLOAT3(-350.0f,	 0.0f,	 750.0f);
-	XMFLOAT3 way7 = XMFLOAT3(-350.0f,	 0.0f,	 350.0f);
-	XMFLOAT3 way8 = XMFLOAT3(-600.0f,	 0.0f,	 -600.0f);*/
+	XMFLOAT3 way1 = XMFLOAT3(-500.0f, 0.0f, 200.0f);
+	XMFLOAT3 way2 = XMFLOAT3(-450.0f, 0.0f, 360.0f);
+	XMFLOAT3 way3 = XMFLOAT3(-250.0f, 0.0f, 470.0f);
+	XMFLOAT3 way4 = XMFLOAT3(-150.0f, 0.0f, 510.0f);
+	XMFLOAT3 way5 = XMFLOAT3(-150.0f, 0.0f, 510.0f);
+	XMFLOAT3 way6 = XMFLOAT3(450.0f, 0.0f, 420.0f);
+	XMFLOAT3 way7 = XMFLOAT3(500.0f, 0.0f, 320.0f);
+	XMFLOAT3 way8 = XMFLOAT3(450.0f, 0.0f, 100.0f);
+	XMFLOAT3 way9 = XMFLOAT3(500.0f, 0.0f, -140.0f);
+	XMFLOAT3 way10 = XMFLOAT3(500.0f, 0.0f, -340.0f);
+	XMFLOAT3 way11 = XMFLOAT3(500.0f, 0.0f, -370.0f);
+	XMFLOAT3 way12 = XMFLOAT3(-200.0f, 0.0f, -480.0f);
+	XMFLOAT3 way13 = XMFLOAT3(-450.0f, 0.0f, -320.0f);
 
 	_waypoints = new vector<XMFLOAT3>();
 	_waypoints->push_back(way1);
 	_waypoints->push_back(way2);
 	_waypoints->push_back(way3);
 	_waypoints->push_back(way4);
-	/*_waypoints->push_back(way5);
+	_waypoints->push_back(way5);
 	_waypoints->push_back(way6);
 	_waypoints->push_back(way7);
-	_waypoints->push_back(way8);*/
+	_waypoints->push_back(way8);
+	_waypoints->push_back(way9);
+	_waypoints->push_back(way10);
+	_waypoints->push_back(way11);
+	_waypoints->push_back(way12);
+	_waypoints->push_back(way13);
 
 	InitObjects();
 
@@ -318,13 +323,12 @@ void Application::InitPlaneObjects()
 	particleModel->SetCollisionRadius(10.0f);
 
 	GameObject* planeBody = new GameObject("Plane", appearance, transform, particleModel);
-	planeBody->SetWidth(10.287f);
-	planeBody->SetDepth(16.188);
-	planeBody->SetHeight(3.774);
+	//planeBody->SetWidth(10.287f);
+	//planeBody->SetDepth(16.188);
+	//planeBody->SetHeight(3.774);
 
 	_player = new Plane(planeBody, buildings);
-	_player->SetBoxCollisionDetectionOn(true);
-	particleModel->SetExtents(XMFLOAT3(planeBody->GetWidth() / 2, planeBody->GetHeight() / 2, planeBody->GetDepth() / 2));
+	particleModel->SetDimensions(10.287f, 16.188f, 3.774f);
 
 	// AIs
 	// -----------------------------
@@ -371,10 +375,10 @@ void Application::InitBuildings()
 			structure->SetMass(1.0f);
 
 			GameObject* building = new GameObject("building", buildingappearance, place, structure);
-			building->SetWidth(20.0f);
-			building->SetDepth(20.0f);
-			building->SetHeight(65.0f);
-			structure->SetExtents(XMFLOAT3(building->GetWidth() / 2, building->GetHeight() / 2, building->GetDepth() / 2));
+			//building->SetWidth(20.0f);
+			//building->SetDepth(20.0f);
+			//building->SetHeight(65.0f);
+			structure->SetDimensions(20.0f, 65.0f, 20.0f);
 
 			buildings->push_back(building);
 		}
@@ -1108,20 +1112,31 @@ void Application::Update(float t)
 
 bool Application::CollisionCheck(ParticleModel* object1, ParticleModel* object2)
 {
-	XMFLOAT3 obj1Pos = object1->GetTransform()->GetPosition();
-	XMFLOAT3 obj2Pos = object2->GetTransform()->GetPosition();
+	XMFLOAT3 aPos = object1->GetTransform()->GetPosition();
+	XMFLOAT3 bPos = object2->GetTransform()->GetPosition();
 
-	XMFLOAT3 obj1Box = object1->GetExtents();
-	XMFLOAT3 obj2Box = object2->GetExtents();
+	XMFLOAT3 aSides = object1->GetExtents();
+	XMFLOAT3 bSides = object2->GetExtents();
 
-	float aX = obj1Pos.x - obj1Box.x;				float aWidth = obj1Box.x * 2;
-	float aY = obj1Pos.y - obj1Box.y;				float aHeight = obj1Box.y * 2;
-	float aZ = obj1Pos.z - obj1Box.z;				float aDepth = obj1Box.z * 2;
+	// Object A prerequisit
+	float aX = aPos.x - aSides.x;
+	float aY = aPos.y - aSides.y;
+	float aZ = aPos.z - aSides.z;
 
-	float bX = obj2Pos.x - obj2Box.x;			float bWidth = obj2Box.x * 2;
-	float bY = obj2Pos.y - obj2Box.y;			float bHeight = obj2Box.y * 2;
-	float bZ = obj2Pos.z - obj2Box.z;			float bDepth = obj2Box.z * 2;
+	float aWidth = aSides.x * 2;
+	float aHeight = aSides.y * 2;
+	float aDepth = aSides.z * 2;
 
+	// Object B prerequisit
+	float bX = bPos.x - bSides.x;
+	float bY = bPos.y - bSides.y;
+	float bZ = bPos.z - bSides.z;
+
+	float bWidth = bSides.x * 2;
+	float bHeight = bSides.y * 2;
+	float bDepth = bSides.z * 2;
+
+	// Collision Calculation
 	if (aX > bX + bWidth)
 		return false;
 	else if (aX + aWidth < bX)

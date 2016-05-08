@@ -5,7 +5,6 @@ Plane::Plane(GameObject* planeBody, vector<GameObject*>* collidables)
 {
 	_planeBody = planeBody;
 	_collidables = collidables;
-	_planeBody->GetParticleModel()->SetExtents(XMFLOAT3(planeBody->GetWidth()/2, planeBody->GetHeight()/2, planeBody->GetDepth()/2));
 
 	_planePos = _planeBody->GetTransform()->GetPosition();
 
@@ -215,71 +214,9 @@ void Plane::Update(float t)
 
 	// Update Particle Model
 	_planeBody->GetParticleModel()->Update(t);
-
-	if (_boxCollisionDectectionOn)
-	{
-		if (CheckCollision())
-			_planeBody->GetParticleModel()->ResolveCollision(_touchedObject->GetParticleModel());
-	}
 }
 
 void Plane::Draw(ID3D11DeviceContext* _pImmediateContext)
 {
 	_planeBody->Draw(_pImmediateContext);
-}
-
-bool Plane::CheckCollision()
-{
-	bool returnVal = false;
-
-	XMFLOAT3 aExtents;
-	aExtents.x = _planeBody->GetWidth() * 0.5;
-	aExtents.y = _planeBody->GetHeight() * 0.5;
-	aExtents.z = _planeBody->GetDepth() * 0.5;
-
-	float aX = _planeBody->GetTransform()->GetPosition().x - aExtents.x;
-	float aWidth = aX + aExtents.x * 2.0f;
-	float aY = _planeBody->GetTransform()->GetPosition().y - aExtents.y;
-	float aHeight = aY + aExtents.y * 2.0f;
-	float aZ = _planeBody->GetTransform()->GetPosition().z - aExtents.z;
-	float aDepth = aZ + aExtents.z * 2.0f;
-
-	for (int i = 0; i < _collidables->size(); i++)
-	{
-		if (returnVal)
-			return true;
-
-		XMFLOAT3 bExtents;
-		bExtents.x = _collidables->at(i)->GetWidth() * 0.5;
-		bExtents.y = _collidables->at(i)->GetHeight() * 0.5;
-		bExtents.z = _collidables->at(i)->GetDepth() * 0.5;
-
-		float bX = _collidables->at(i)->GetTransform()->GetPosition().x - bExtents.x;
-		float bWidth = _collidables->at(i)->GetWidth();
-		float bY = _collidables->at(i)->GetTransform()->GetPosition().y - bExtents.y;
-		float bDepth = _collidables->at(i)->GetWidth();
-		float bZ = _collidables->at(i)->GetTransform()->GetPosition().z - bExtents.z;
-		float bHeight = _collidables->at(i)->GetWidth();
-
-		if (aX > bX + bWidth)
-			returnVal = false;
-		else if (aX + aWidth < bX)
-			returnVal = false;
-
-		else if (aY > bY + bHeight)
-			returnVal = false;
-		else if (aY + aHeight < bY)
-			returnVal = false;
-
-		else if (aZ > bZ + bDepth)
-			returnVal = false;
-		else if (aZ + aDepth < bZ)
-			returnVal = false;
-		else
-		{
-			_touchedObject = _collidables->at(i);
-			returnVal = true;
-		}
-	}
-	return returnVal;
 }

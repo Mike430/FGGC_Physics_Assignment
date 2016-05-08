@@ -30,14 +30,6 @@ public:
 	void AddChild(GameObject* child)						{ _children.push_back(child); child->GetTransform()->SetParent(_transform); };
 	vector < GameObject* > GetChildren()					{ return _children; };
 
-	float GetWidth()										const{ return _width; }
-	float GetDepth()										const{ return _depth; }
-	float GetHeight()										const{ return _height; }
-
-	void SetWidth(float width)								{ _width = width; }
-	void SetDepth(float depth)								{ _depth = depth; }
-	void SetHeight(float height)							{ _height = height; }
-
 private:
 	string _type;
 
@@ -47,8 +39,4 @@ private:
 
 	// Children in Scene Graph
 	vector < GameObject* > _children;
-
-	float _width = 0.0f;
-	float _depth = 0.0f;
-	float _height = 0.0f;
 };

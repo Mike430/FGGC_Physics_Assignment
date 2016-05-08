@@ -47,25 +47,27 @@ public:
 
 	// --------------- Get/Set ------------------ //
 
-	inline void SetExtents(XMFLOAT3 extents) { _extents = extents; }
-	inline XMFLOAT3 GetExtents() const { return _extents; }
+	void SetDimensions(float x, float y, float z)			{ SetDimensions(XMFLOAT3(x, y, z)); }
+	void SetDimensions(XMFLOAT3 dimensions);
+	XMFLOAT3 GetDimensions()								const { return _dimensions; }
+	XMFLOAT3 GetExtents()									const { return _extents; }
 
-	inline void SetTransform(Transform* transform) { _transform = transform; }
-	inline Transform* GetTransform() const { return _transform; }
+	void SetTransform(Transform* transform)					{ _transform = transform; }
+	Transform* GetTransform()								const { return _transform; }
 
 	// Get/Set Collision Radius
-	float GetCollisionRadius() const { return _collisionRadius; }
-	void SetCollisionRadius(float collisionRadius) { _collisionRadius = collisionRadius; }
+	float GetCollisionRadius()								const { return _collisionRadius; }
+	void SetCollisionRadius(float collisionRadius)			{ _collisionRadius = collisionRadius; }
 
 	// Get/Set Mass
-	float GetMass() const { return _mass; };
-	void SetMass(float mass) { _mass = mass; }
+	float GetMass()											const { return _mass; };
+	void SetMass(float mass)								{ _mass = mass; }
 
 	// Get/Set Velocity
-	XMFLOAT3 GetVelocity() const { return _velocity; }
-	void SetVelocity(XMFLOAT3 velocity) { _velocity = velocity; }
+	XMFLOAT3 GetVelocity()									const { return _velocity; }
+	void SetVelocity(XMFLOAT3 velocity)						{ _velocity = velocity; }
 
-	void SetTheta(float theta) { _theta = theta; }
+	void SetTheta(float theta)								{ _theta = theta; }
 
 	// Manipulators
 	void AddForce(XMFLOAT3 force);
@@ -80,6 +82,7 @@ public:
 
 protected:
 	Transform* _transform;
+	XMFLOAT3 _dimensions;
 	XMFLOAT3 _extents;
 
 private:

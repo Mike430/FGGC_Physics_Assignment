@@ -30,6 +30,18 @@ ParticleModel::~ParticleModel()
 
 }
 
+// -------------------- BoundingBox ---------------- //
+void ParticleModel::SetDimensions(XMFLOAT3 dimensions)
+{
+	_dimensions.x = dimensions.x;
+	_dimensions.y = dimensions.y;
+	_dimensions.z = dimensions.z;
+
+	_extents.x = _dimensions.x * 0.5;
+	_extents.y = _dimensions.y * 0.5;
+	_extents.z = _dimensions.z * 0.5;
+}
+
 // ----------------------- Movement ------------------------- //
 
 void ParticleModel::Move(float amountX, float amountY, float amountZ)

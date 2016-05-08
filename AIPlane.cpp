@@ -29,7 +29,7 @@ void AIPlane::Update(float t)
 
 void AIPlane::FollowPoints()
 {
-	//targetPosition = waypoints.at(targetIndex)->GetTransform()->GetPosition();
+	targetPosition = _waypoints->at(targetIndex);
 	XMFLOAT3 carPosition = GetPlaneBody()->GetTransform()->GetPosition();
 
 	// Distance to Target Position
@@ -40,7 +40,7 @@ void AIPlane::FollowPoints()
 
 	float targetDistanceMagnitude = sqrt((targetDistance.x * targetDistance.x) + /*(targetDistance.y * targetDistance.y) +*/ (targetDistance.z * targetDistance.z));
 
-	if (targetDistanceMagnitude <= 400.0f)
+	if (targetDistanceMagnitude <= 200.0f)
 	{
 		targetIndex += 1;
 	}
@@ -49,9 +49,6 @@ void AIPlane::FollowPoints()
 	{
 		targetIndex = 0;
 	}
-
-
-	targetPosition = _waypoints->at(targetIndex);
 }
 
 // --------------- STEERING BEHAVIOUR ---------------- //
