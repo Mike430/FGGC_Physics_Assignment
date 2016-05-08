@@ -1,6 +1,6 @@
 #include "AIPlane.h"
 
-AIPlane::AIPlane(GameObject* carBody, vector<XMFLOAT3>* waypoints) : Plane(carBody)
+AIPlane::AIPlane(GameObject* carBody, vector<XMFLOAT3>* waypoints, vector<GameObject*>* collidables) : Plane(carBody, collidables)
 {
 	_waypoints = waypoints;
 
@@ -40,7 +40,7 @@ void AIPlane::FollowPoints()
 
 	float targetDistanceMagnitude = sqrt((targetDistance.x * targetDistance.x) + /*(targetDistance.y * targetDistance.y) +*/ (targetDistance.z * targetDistance.z));
 
-	if (targetDistanceMagnitude <= 200.0f)
+	if (targetDistanceMagnitude <= 400.0f)
 	{
 		targetIndex += 1;
 	}

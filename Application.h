@@ -108,10 +108,9 @@ private:
 	GameObject* groundPlane;
 	GameObject* mountain;
 	GameObject* skyBox;
-	vector<GameObject*> buildings;
+	vector<GameObject*>* buildings;
 
 	// Waypoints
-	//vector < GameObject* > waypoints;
 	vector<XMFLOAT3>* _waypoints;
 
 	// Car GameObject properties
@@ -171,6 +170,8 @@ public:
 	bool HandleKeyboard(MSG msg);
 
 	void Update(float t);
+
+	bool CollisionCheck(ParticleModel*, ParticleModel*);
 	void Draw();
 };
 

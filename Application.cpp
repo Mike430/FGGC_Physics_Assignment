@@ -118,24 +118,29 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 
 	_camera = new Camera(eye, at, up, (float)_renderWidth, (float)_renderHeight, 0.01f, 1000000.0f);
 
-	XMFLOAT3 way1 = XMFLOAT3(-600.0f,	 0.0f,	 -600.0f);
+	XMFLOAT3 way1 = XMFLOAT3(-1000.0f, 0.0f, -1000.0f);
+	XMFLOAT3 way2 = XMFLOAT3(1000.0f, 0.0f, -1000.0f);
+	XMFLOAT3 way3 = XMFLOAT3(1000.0f, 0.0f, 1000.0f);
+	XMFLOAT3 way4 = XMFLOAT3(-1000.0f, 0.0f, 1000.0f);
+
+	/*XMFLOAT3 way1 = XMFLOAT3(-600.0f,	 0.0f,	 -600.0f);
 	XMFLOAT3 way2 = XMFLOAT3(600.0f,	 0.0f,	 -500.0f);
 	XMFLOAT3 way3 = XMFLOAT3(700.0f,	 0.0f,	 200.0f);
 	XMFLOAT3 way4 = XMFLOAT3(700.0f,	 0.0f,	 -350.0f);
 	XMFLOAT3 way5 = XMFLOAT3(350.0f,	 0.0f,	 600.0f);
 	XMFLOAT3 way6 = XMFLOAT3(-350.0f,	 0.0f,	 750.0f);
 	XMFLOAT3 way7 = XMFLOAT3(-350.0f,	 0.0f,	 350.0f);
-	XMFLOAT3 way8 = XMFLOAT3(-600.0f,	 0.0f,	 -600.0f);
+	XMFLOAT3 way8 = XMFLOAT3(-600.0f,	 0.0f,	 -600.0f);*/
 
 	_waypoints = new vector<XMFLOAT3>();
 	_waypoints->push_back(way1);
 	_waypoints->push_back(way2);
 	_waypoints->push_back(way3);
 	_waypoints->push_back(way4);
-	_waypoints->push_back(way5);
+	/*_waypoints->push_back(way5);
 	_waypoints->push_back(way6);
 	_waypoints->push_back(way7);
-	_waypoints->push_back(way8);
+	_waypoints->push_back(way8);*/
 
 	InitObjects();
 
@@ -243,8 +248,8 @@ void Application::InitObjects()
 	skyBox = new GameObject("Sky Box", appearance, transform, particleModel);
 
 	// Init Plane collection Objects
-	InitPlaneObjects();
 	InitBuildings();
+	InitPlaneObjects();	
 	
 	// Camera
 	XMFLOAT3 planePos = _player->GetPlanePosition();
@@ -313,8 +318,13 @@ void Application::InitPlaneObjects()
 	particleModel->SetCollisionRadius(10.0f);
 
 	GameObject* planeBody = new GameObject("Plane", appearance, transform, particleModel);
+	planeBody->SetWidth(10.287f);
+	planeBody->SetDepth(16.188);
+	planeBody->SetHeight(3.774);
 
-	_player = new Plane(planeBody);
+	_player = new Plane(planeBody, buildings);
+	_player->SetBoxCollisionDetectionOn(true);
+	particleModel->SetExtents(XMFLOAT3(planeBody->GetWidth() / 2, planeBody->GetHeight() / 2, planeBody->GetDepth() / 2));
 
 	// AIs
 	// -----------------------------
@@ -333,7 +343,7 @@ void Application::InitPlaneObjects()
 
 		GameObject* aiPlaneBody = new GameObject("Plane", iaAppearance, aiTransform, aiParticle);
 
-		AIPlane* aiPlane = new AIPlane(aiPlaneBody, _waypoints);
+		AIPlane* aiPlane = new AIPlane(aiPlaneBody, _waypoints, buildings);
 		_aiPlanes.push_back(aiPlane);
 	}
 }
@@ -345,20 +355,28 @@ void Application::InitBuildings()
 	Geometry building = OBJLoader::Load("Objects/Building.obj", _pd3dDevice);
 	Appearance* buildingappearance = new Appearance(building, noSpecMaterial);
 
-	buildings.clear();
+	buildings = new vector<GameObject*>;
+	buildings->clear();
 
 	for (int i = 0; i <  numberOfbuildings / 10; i++)
 	{
 		for (int j = 0; j < 10; j++)
 		{
 			Transform* place = new Transform();
-			place->SetPosition((i * 50) - 200, 0.0f, (j * 50) - 100);
+			place->SetPosition((i * 50) - 200, 32.0f, (j * 50) - 100);
+			place->SetPrevPosition((i * 50) - 200, 32.0f, (j * 50) - 100);
 			place->SetScale(1, 1, 1);
 
 			ParticleModel* structure = new ParticleModel(place, 1000.0f);
+			structure->SetMass(1.0f);
 
 			GameObject* building = new GameObject("building", buildingappearance, place, structure);
-			buildings.push_back(building);
+			building->SetWidth(20.0f);
+			building->SetDepth(20.0f);
+			building->SetHeight(65.0f);
+			structure->SetExtents(XMFLOAT3(building->GetWidth() / 2, building->GetHeight() / 2, building->GetDepth() / 2));
+
+			buildings->push_back(building);
 		}
 	}
 }
@@ -1069,15 +1087,55 @@ void Application::Update(float t)
 
 
 	// Update Building
-	for (int i = 0; i < buildings.size(); i++)
+	for (int i = 0; i < buildings->size(); i++)
 	{
-		buildings.at(i)->Update(t);
+		buildings->at(i)->Update(t);
 	}
 
 	for (int i = 0; i < _aiPlanes.size(); i++)
 	{
 		_aiPlanes.at(i)->Update(t);
 	}
+
+	for (int i = 0; i < buildings->size(); i++)
+	{
+		if (CollisionCheck(_player->GetPlaneBody()->GetParticleModel(), buildings->at(i)->GetParticleModel()))
+		{
+			_player->GetPlaneBody()->GetParticleModel()->ResolveCollision(buildings->at(i)->GetParticleModel());
+		}
+	}
+}
+
+bool Application::CollisionCheck(ParticleModel* object1, ParticleModel* object2)
+{
+	XMFLOAT3 obj1Pos = object1->GetTransform()->GetPosition();
+	XMFLOAT3 obj2Pos = object2->GetTransform()->GetPosition();
+
+	XMFLOAT3 obj1Box = object1->GetExtents();
+	XMFLOAT3 obj2Box = object2->GetExtents();
+
+	float aX = obj1Pos.x - obj1Box.x;				float aWidth = obj1Box.x * 2;
+	float aY = obj1Pos.y - obj1Box.y;				float aHeight = obj1Box.y * 2;
+	float aZ = obj1Pos.z - obj1Box.z;				float aDepth = obj1Box.z * 2;
+
+	float bX = obj2Pos.x - obj2Box.x;			float bWidth = obj2Box.x * 2;
+	float bY = obj2Pos.y - obj2Box.y;			float bHeight = obj2Box.y * 2;
+	float bZ = obj2Pos.z - obj2Box.z;			float bDepth = obj2Box.z * 2;
+
+	if (aX > bX + bWidth)
+		return false;
+	else if (aX + aWidth < bX)
+		return false;
+	else if (aY > bY + bHeight)
+		return false;
+	else if (aY + aHeight < bY)
+		return false;
+	else if (aZ > bZ + bDepth)
+		return false;
+	else if (aZ + aDepth < bZ)
+		return false;
+
+	return true;
 }
 
 // --------------- Draw --------------- //
@@ -1255,18 +1313,18 @@ void Application::Draw()
 
 	// ------------- Draw Buildings ------------- //
 
-	for (int i = 0; i < buildings.size(); i++)
+	for (int i = 0; i < buildings->size(); i++)
 	{
-		material = buildings.at(i)->GetAppearance()->GetMaterial();
+		material = buildings->at(i)->GetAppearance()->GetMaterial();
 		cb.surface.AmbientMtrl = material.ambient;
 		cb.surface.DiffuseMtrl = material.diffuse;
 		cb.surface.SpecularMtrl = material.specular;
 
-		cb.World = XMMatrixTranspose(buildings.at(i)->GetTransform()->GetWorldMatrix());
+		cb.World = XMMatrixTranspose(buildings->at(i)->GetTransform()->GetWorldMatrix());
 
 
 		_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
-		buildings.at(i)->Draw(_pImmediateContext);
+		buildings->at(i)->Draw(_pImmediateContext);
 	}
 
 	// ------------- Draw AIs -------------------- //

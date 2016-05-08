@@ -10,7 +10,7 @@
 class AIPlane : public Plane
 {
 public:
-	AIPlane(GameObject* carBody, vector<XMFLOAT3>* waypoints);
+	AIPlane(GameObject* carBody, vector<XMFLOAT3>* waypoints, vector<GameObject*>* collidables);
 	~AIPlane();
 
 	void Update(float t);

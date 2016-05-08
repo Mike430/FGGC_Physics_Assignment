@@ -17,9 +17,9 @@ void GameObject::Update(float t)
 {
 	_transform->Update(t);
 
-	if (!children.empty())
+	if (!_children.empty())
 	{
-		for each(GameObject* child in children)
+		for each(GameObject* child in _children)
 		{
 			child->Update(t);
 		}

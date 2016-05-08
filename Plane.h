@@ -6,7 +6,7 @@
 class Plane
 {
 public:
-	Plane(GameObject* planeBody);
+	Plane(GameObject* planeBody, vector<GameObject*>* collidables);
 	~Plane();
 
 	virtual void Update(float t);
@@ -34,6 +34,7 @@ public:
 																_planeBody->GetTransform()->SetRotation(0.0f, _planeRotation, 0.0f); };
 	void AddPlaneRotation(float _planeRotation)					{ _planeRotation = _planeRotation; _planeRotation = _planeRotation * (XM_PI / 180);
 																_planeBody->GetTransform()->SetRotation(0.0f, _planeRotation, 0.0f); };
+	bool CheckCollision();
 
 	// Get/Set Plane Rotation Speed
 	// float GetPlaneRotationSpeed()								const { return planeRotationSpeed; };
@@ -44,9 +45,14 @@ public:
 	void SetPlaneWheelRotation(float _planeWheelRotation)		{ _planeTurningAngle = _planeWheelRotation; };
 	void AddPlaneWheelRotation(float _planeWheelRotation)		{ _planeTurningAngle += _planeWheelRotation; };
 
+	void SetBoxCollisionDetectionOn(bool onOff)					{ _boxCollisionDectectionOn = onOff; }
+
 private:
 	// Plane Object
 	GameObject* _planeBody;
+	GameObject* _touchedObject;
+
+	XMFLOAT3 _extents;
 
 	// Plane Properties
 	XMFLOAT3 _planePos;
@@ -62,4 +68,8 @@ private:
 	float _planePitch;
 
 	float _engineSpeedAdd;
+
+	bool _boxCollisionDectectionOn = false;
+
+	vector<GameObject*>* _collidables;
 };

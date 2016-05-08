@@ -47,6 +47,12 @@ public:
 
 	// --------------- Get/Set ------------------ //
 
+	inline void SetExtents(XMFLOAT3 extents) { _extents = extents; }
+	inline XMFLOAT3 GetExtents() const { return _extents; }
+
+	inline void SetTransform(Transform* transform) { _transform = transform; }
+	inline Transform* GetTransform() const { return _transform; }
+
 	// Get/Set Collision Radius
 	float GetCollisionRadius() const { return _collisionRadius; }
 	void SetCollisionRadius(float collisionRadius) { _collisionRadius = collisionRadius; }
@@ -74,6 +80,7 @@ public:
 
 protected:
 	Transform* _transform;
+	XMFLOAT3 _extents;
 
 private:
 	// Movement
